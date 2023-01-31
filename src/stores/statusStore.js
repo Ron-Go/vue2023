@@ -1,6 +1,10 @@
-import axios from "axios";
 import { defineStore } from "pinia";
+import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+// 匯入adminStore
+import adminStore from '@/stores/admin/adminStore';
+
 
 export default defineStore('statusStore', {
   state: () => ({
@@ -49,8 +53,14 @@ export default defineStore('statusStore', {
                 '你的資料已被刪除',
                 'success'
               );
-              axios.get(`${this.api.url}/api/${this.api.path}/admin/products`)
-                .then(res => {})
+              // 建立adminStore實體
+              const admin = adminStore();
+              // category代入分類選單的值
+              axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${admin.selectEl.value}`)
+                .then(res => {
+                  // 取得對應分類選單的產品資料
+                  admin.tempProducts = res.data.products;
+                })
                 .catch(err => {
                   this.swAlert('center', 'error', err.response.data.message, false, true);
                 })

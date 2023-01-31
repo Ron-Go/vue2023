@@ -2,12 +2,16 @@
   <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content border-0">
-        <div class="modal-header bg-dark text-white">
+        <div class="modal-header text-white"
+          :class="{
+            'bg-success': admin.operateMode === 'add',
+            'bg-primary': admin.operateMode === 'edit',
+          }">
           <h5 id="productModalLabel" class="modal-title">
-            <span v-if="admin.operateMode === 'add'">新增產品</span>
-            <span v-else-if="admin.operateMode === 'edit'">修改產品</span>
+            <span class="fs-5" v-if="admin.operateMode === 'add'">新增產品</span>
+            <span class="fs-5" v-else-if="admin.operateMode === 'edit'">修改產品</span>
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -68,9 +72,22 @@
                 </textarea>
               </div>
               <div class="mb-3">
-                <div class="form-check">
-                  <input id="is_enabled" class="form-check-input" type="checkbox" v-model="admin.tempData.is_enabled">
-                  <label class="form-check-label" for="is_enabled">是否啟用</label>
+                <div class="row align-items-center">
+                  <div class="mb-3 mb-md-0 col-md-6 d-flex align-items-center">
+                    <label class="form-label me-3 mb-0" for="rating">評等</label>
+                    <select class="form-select border w-75" id="rating" v-model="admin.tempData.rating">
+                      <option value="" disabled>選擇評等</option>
+                      <template v-for="(value, key) in 5" :key="'option' + key">
+                        <option :value="value">{{`${value}`}}</option>
+                      </template>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-check">
+                      <input id="is_enabled" class="form-check-input" type="checkbox" v-model="admin.tempData.is_enabled">
+                      <label class="form-check-label" for="is_enabled">是否啟用</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -80,7 +97,12 @@
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             取消
           </button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="admin.confirmProduct()">
+          <button type="button" class="btn btn-primary"
+            :class="{ 
+              'bg-success': admin.operateMode === 'add',
+              'bg-primary': admin.operateMode === 'edit',
+              }"
+            data-bs-dismiss="modal" @click="admin.confirmProduct()">
             確認
           </button>
         </div>

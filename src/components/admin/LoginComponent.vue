@@ -1,7 +1,7 @@
 <template>
   <div class="container">
       <div class="row vh-100 d-flex flex-column align-items-center">
-        <div class="col-4 mt-auto mb-auto">
+        <div class="col-6 col-sm-6 col-md-4 col-lg-3 mt-auto mb-auto">
           <form>
             <h1 class="h3 mb-3 font-weight-normal text-center">請先登入</h1>
             <div class="form-floating mb-3">

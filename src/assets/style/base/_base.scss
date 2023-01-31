@@ -38,6 +38,10 @@ h5{
   margin-bottom: 0;
 }
 
+th{
+  font-weight: bold;
+}
+
 li{
   font-size: $font-size-base * 1.25;
   line-height: 1.5;
@@ -73,10 +77,12 @@ figcaption{
 }
 
 label{
+  display: block;
   color: #000000;
   font-size: $font-size-base * 1;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.5;
+  text-align: left;
 }
 
 ::placeholder{
