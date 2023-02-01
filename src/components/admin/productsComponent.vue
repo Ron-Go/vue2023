@@ -91,10 +91,6 @@
   import productModal from '@/components/admin/productModal';
   // 匯入productModal
   import paginationComponent from '@/components/admin/paginationComponent';
-  // 匯入adminStore
-  import adminStore from '@/stores/admin/adminStore';
-  // 匯入statusStore
-  import statusStore from '@/stores/statusStore';
   // 匯入生命週期onMounted
   import { onMounted, onUpdated } from 'vue';
   
@@ -103,9 +99,11 @@
       productModal,
       paginationComponent,
     },
-    setup() {
-      const admin = adminStore();
-      const status = statusStore();
+    props: ['store'],
+    setup(props) {
+      // 從adminView取得props.store資料
+      const admin = props.store.admin;
+      const status = props.store.status;
       // 開啟modal視窗
       const openModal = () => {
         const productModal = new Modal(document.getElementById('productModal'));
@@ -127,17 +125,17 @@
         // 把代入的產品資料，傳到adminStore
         admin.tempData = {...item};
       };
-      // const delectItem = (item) => {
-      //   status.
-      // };
+      // 掛載組件後調用
       onMounted(() => {
         // 檢查登入狀態
         admin.checkStatus();
+        // 取得所有產品分類
         admin.getAllCategory();
       });
+      // 重新渲染後調用
       onUpdated(() => {
+        // 取得分類select選單DOM
         admin.selectEl = document.querySelector('.selectEl');
-        status.selectEl = document.querySelector('.selectEl');
       });
       return {
         admin,

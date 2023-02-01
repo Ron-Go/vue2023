@@ -75,7 +75,7 @@
                 <div class="row align-items-center">
                   <div class="mb-3 mb-md-0 col-md-6 d-flex align-items-center">
                     <label class="form-label me-3 mb-0" for="rating">評等</label>
-                    <select class="form-select border w-75" id="rating" v-model="admin.tempData.rating">
+                    <select class="form-select border w-75" id="rating" v-model.number="admin.tempData.rating">
                       <option value="" disabled>選擇評等</option>
                       <template v-for="(value, key) in 5" :key="'option' + key">
                         <option :value="value">{{`${value}`}}</option>

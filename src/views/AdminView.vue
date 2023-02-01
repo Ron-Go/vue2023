@@ -30,29 +30,40 @@
               Article
             </router-link>
           </li>
-          <!-- <li class="aside__list__item">
-            <a class="item__link d-flex py-1 fw-bold" href="">
-              <span class="material-symbols-outlined icon--pill me-3">settings</span>
-              Settings
+          <li class="aside__list__item">
+            <a class="item__link d-flex py-1 fw-bold" href="" @click.prevent="status.logout()">
+              <span class="material-symbols-outlined icon--pill me-3">logout</span>
+              Logout
             </a>
-          </li> -->
+          </li>
         </ul>
       </nav>
     </aside>
     <main class="float-end mx-3">
-      <router-view></router-view>  
+      <!-- adminStore、statusStore實體傳入router-view -->
+      <router-view :store="{admin, status}"></router-view>  
     </main>
   </div>
 </template>
 
 <script>
-// import login from '../components/admin/LoginComponent.vue';
+// 匯入adminStore
+import adminStore from '@/stores/admin/adminStore';
+// 匯入statusStore
+import statusStore from '@/stores/statusStore';
 
 export default {
   components: {
-  },
-  setup() {
-
+    },
+  setup() { 
+    // 建立adminStore實體
+    const admin = adminStore();
+    // 建立statusStore實體
+    const status = statusStore();
+    return {
+      admin,
+      status,
+    }
   },
 };
 </script>

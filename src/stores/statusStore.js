@@ -1,10 +1,7 @@
 import { defineStore } from "pinia";
-import axios from "axios";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 // 匯入adminStore
 import adminStore from '@/stores/admin/adminStore';
-
 
 export default defineStore('statusStore', {
   state: () => ({
@@ -22,7 +19,7 @@ export default defineStore('statusStore', {
       // 用Promise base包起來，調用的時候加上await轉為同步
       return new Promise((resolve, reject) => {
         resolve(
-          Swal.fire({
+          this.Swal.fire({
             position: pos,    // 出現位置
             icon: icon,
             title: title,
@@ -34,7 +31,7 @@ export default defineStore('statusStore', {
       })
     },
     swDelect(product) {
-      Swal.fire({
+      this.Swal.fire({
         title: `確認刪除『${product.title}』?`,
         text: "資料刪除後，你將無法恢復！",
         icon: 'warning',
@@ -45,18 +42,18 @@ export default defineStore('statusStore', {
         cancelButtonText: '取消'
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.delete(`${this.api.url}/api/${this.api.path}/admin/product/${product.id}`)
+          this.axios.delete(`${this.api.url}/api/${this.api.path}/admin/product/${product.id}`)
             .then((res) => {
               console.log(res);
-              Swal.fire(
+              this.Swal.fire(
                 res.data.message,
                 '你的資料已被刪除',
                 'success'
               );
               // 建立adminStore實體
               const admin = adminStore();
-              // category代入分類選單的值
-              axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${admin.selectEl.value}`)
+              // 資料刪除後再重新取得產品資料(category代入分類選單的值)
+              this.axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${admin.selectEl.value}`)
                 .then(res => {
                   // 取得對應分類選單的產品資料
                   admin.tempProducts = res.data.products;
@@ -66,8 +63,7 @@ export default defineStore('statusStore', {
                 })
             })
             .catch((err) => {
-              console.log(err);
-              Swal.fire(
+              this.Swal.fire(
                 err.response.data.message,
                 '你的資料尚未被刪除',
                 'error'
@@ -75,6 +71,42 @@ export default defineStore('statusStore', {
             });
         }
       })
-    }
+    },
+    // 登出
+    logout() {
+      this.Swal.fire({
+        title: `是否『登出』後台`,
+        text: '',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '確認登出',
+        cancelButtonText: '取消'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.axios.post(`${this.api.url}/logout`)
+            .then(res => {
+              this.Swal.fire(
+                res.data.message,
+                '',
+                'success'
+              ).then((result) => {
+                if (result.isConfirmed) {
+                  // 轉跳login頁面
+                  this.router.push('/login');
+                }
+              });
+            })
+            .catch(err => {
+              this.Swal.fire(
+                err.response.data.message,
+                '',
+                'error'
+              );
+            });
+        }
+      })
+    },
   },
 });

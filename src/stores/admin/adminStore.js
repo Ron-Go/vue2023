@@ -1,8 +1,5 @@
 import { defineStore } from "pinia";
 
-// 匯入axios
-import axios from 'axios';
-
 // 匯入statusStore
 import statusStore from '@/stores/statusStore';
 const status = statusStore();
@@ -33,7 +30,7 @@ export default defineStore('adminStore', {
   actions: {
     // 取得所有產品分類
     getAllCategory() {
-      axios.get(`${this.api.url}/api/${this.api.path}/admin/products/all`)
+      this.axios.get(`${this.api.url}/api/${this.api.path}/admin/products/all`)
         .then(res => {
           // 取得所有商品物件資料
           const allProducts = res.data.products
@@ -63,7 +60,7 @@ export default defineStore('adminStore', {
     },
     // 取得全部商品
     getProducts(category = '') {
-      axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${category}`)
+      this.axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${category}`)
         .then(res => {
           // 取得對應分類選單的產品資料、分頁資料
           this.tempProducts = res.data.products;
@@ -79,10 +76,10 @@ export default defineStore('adminStore', {
       (async () => {
         // 從cookie取得token
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        axios.defaults.headers.common["Authorization"] = token;
+        this.axios.defaults.headers.common["Authorization"] = token;
         try {
           // 驗證登入狀態
-          const res1 = await axios.post(`${this.api.url}/api/user/check`)
+          const res1 = await this.axios.post(`${this.api.url}/api/user/check`)
           // 取得驗證確認
           this.checkResult = res1.data.success;
           // 取得資料
@@ -100,7 +97,7 @@ export default defineStore('adminStore', {
       (async () => {
         try {
           // 新增商品內容
-          const res1 = await axios.post(`${this.api.url}/api/${this.api.path}/admin/product`, { data: tempData });
+          const res1 = await this.axios.post(`${this.api.url}/api/${this.api.path}/admin/product`, { data: tempData });
           // 取得資料，代入category參數（根據分類選單的值）
           this.getProducts(this.selectEl.value);
           // 跳出狀態提示
@@ -115,7 +112,7 @@ export default defineStore('adminStore', {
       (async () => {
         try {
           // 修改商品內容
-          const res1 = await axios.put(`${this.api.url}/api/${this.api.path}/admin/product/${id}`, { data: putData });
+          const res1 = await this.axios.put(`${this.api.url}/api/${this.api.path}/admin/product/${id}`, { data: putData });
           // 取得資料，代入category參數（根據分類選單的值）
           this.getProducts(this.selectEl.value);
           // 跳出狀態提示
@@ -128,7 +125,7 @@ export default defineStore('adminStore', {
     // 換頁
     changePage(page) {
       // 取得全部商品
-      axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?page=${page}`)
+      this.axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?page=${page}`)
         .then(res => {
           // 取得全部商品
           this.tempProducts = res.data.products;

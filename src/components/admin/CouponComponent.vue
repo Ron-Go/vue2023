@@ -2,7 +2,8 @@
 
 <script>
 export default {
-  setup() {
+  props: ['store'],
+  setup(props) {
     return {};
   },
 };
