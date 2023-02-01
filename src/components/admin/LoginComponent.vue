@@ -23,12 +23,10 @@
 // 匯入loginStore
 import loginStore from '@/stores/admin/loginStore';
 
-
-
 export default {
   setup() {
-    const login = loginStore();
-    return{
+    const login = loginStore();// 建立adminStore實體
+    return {
       login,
     };
   },

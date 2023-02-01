@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 // 匯入statusStore
 import statusStore from '@/stores/statusStore';
-const status = statusStore();
+// const status = statusStore();
 
 export default defineStore('adminStore', {
   state: () => ({
@@ -49,6 +49,7 @@ export default defineStore('adminStore', {
           });
         })
         .catch(err => {
+          const status = statusStore(); // 建立statusStore實體
           const { message } = err.response.data;
           status.swAlert('center', 'error', message, false, false);
         });
@@ -67,6 +68,7 @@ export default defineStore('adminStore', {
           this.pagination = res.data.pagination;
         })
         .catch(err => {
+          const status = statusStore(); // 建立statusStore實體
           const { message } = err.response.data;
           status.swAlert('center', 'error', message, false, false);
         });
@@ -86,6 +88,7 @@ export default defineStore('adminStore', {
           this.getProducts();
         } catch (error) {
           const { message } = error.response.data;
+          const status = statusStore(); // 建立statusStore實體
           await status.swAlert('center', 'error', message, false, false);
           // 轉跳login頁面
           this.router.push('/login');
@@ -95,6 +98,7 @@ export default defineStore('adminStore', {
     // 新增資料至遠端
     add(tempData) {
       (async () => {
+        const status = statusStore();
         try {
           // 新增商品內容
           const res1 = await this.axios.post(`${this.api.url}/api/${this.api.path}/admin/product`, { data: tempData });
@@ -110,6 +114,7 @@ export default defineStore('adminStore', {
     // 更改遠端資料
     put(id, putData) {
       (async () => {
+        const status = statusStore(); // 建立statusStore實體
         try {
           // 修改商品內容
           const res1 = await this.axios.put(`${this.api.url}/api/${this.api.path}/admin/product/${id}`, { data: putData });
@@ -133,13 +138,14 @@ export default defineStore('adminStore', {
           this.pagination = res.data.pagination;
         })
         .catch(err => {
+          const status = statusStore(); // 建立statusStore實體
           status.swAlert('top-end', 'error', err.response.data, false, true);
         })
     },
     // 變更啟用狀態
     changeStatus(item) {
       const { id } = item;
-      let itemData = {...item};
+      const itemData = { ...item };
       // 更改產品is_enable的布林值
       itemData.is_enabled = !itemData.is_enabled;
       this.put(id, itemData);

@@ -50,8 +50,7 @@ export default defineStore('statusStore', {
                 '你的資料已被刪除',
                 'success'
               );
-              // 建立adminStore實體
-              const admin = adminStore();
+              const admin = adminStore();  // 建立adminStore實體
               // 資料刪除後再重新取得產品資料(category代入分類選單的值)
               this.axios.get(`${this.api.url}/api/${this.api.path}/admin/products/?category=${admin.selectEl.value}`)
                 .then(res => {
