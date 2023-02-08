@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 
 // 匯入statusStore
 import statusStore from '@/stores/statusStore';
-// const status = statusStore();
 
 export default defineStore('adminStore', {
   state: () => ({
@@ -23,7 +22,8 @@ export default defineStore('adminStore', {
     pagination: {},
     // 分類選單Dom
     selectEl: null, 
-    test: 0,
+    // 上傳檔案input Dom
+    uploadEl: null, 
   }),
   getters: {
   },
@@ -126,6 +126,54 @@ export default defineStore('adminStore', {
           status.swAlert('top-end', 'error', error.response.data.message, false, true);
         };
       })();
+    },
+    // 上傳檔案
+    uploadFile() {
+      if (this.uploadEl.value === '') return;  
+      // 取得檔案格式資料
+      const file = this.uploadEl.files[0]; 
+      // 用表單形式將檔案上傳
+      // 內建的FormData格式，用來產生表單格式，跟我們要上傳的表單格式是一致的
+      const formData = new FormData();
+      // 把file附加到FormData（new FormData() ）
+      formData.append('file-to-upload', file);
+      this.axios.post(`${this.api.url}/api/${this.api.path}/admin/upload`, formData)
+        .then(res => {
+          this.Swal.fire({
+            title: `上傳成功`,
+             // 加上html元素input、button
+            html: 
+            `<input class="form-control imageUrl" id="imageUrl" type="text" value="1234">`,
+            didOpen: () => {
+              // 選取<input>元素，把上傳圖片後回傳的imageUrl，賦予給<input>value值
+              document.querySelector('.imageUrl').value = res.data.imageUrl;
+            },
+            // text: '',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '複製圖片位置 ',
+            cancelButtonText: '取消'
+          }).then((result) => {
+            // 點擊confirmButton按鈕，複製<input>的value值
+            if (result.isConfirmed) {
+              // 選取<input>元素
+              const input = document.querySelector('.imageUrl');
+              // 使用Clipboard API，複製<input>的value值
+              navigator.clipboard.writeText(input.value);
+               // 清除file input欄位檔案資料
+              this.uploadEl.value = '';
+            }
+          })
+        })
+        .catch(err => {
+          this.Swal.fire(
+            '上傳失敗',
+            err.message,
+            'error'
+          );
+        })
     },
     // 換頁
     changePage(page) {

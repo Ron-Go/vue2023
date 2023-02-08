@@ -112,7 +112,9 @@
       // 新增商品
       const addItem = () => {
         admin.operateMode = '';
-        admin.tempData = {};
+        admin.tempData = {
+          imagesUrl: [],
+        },
         openModal();
         admin.operateMode = 'add';
       };

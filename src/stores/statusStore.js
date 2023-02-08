@@ -44,7 +44,6 @@ export default defineStore('statusStore', {
         if (result.isConfirmed) {
           this.axios.delete(`${this.api.url}/api/${this.api.path}/admin/product/${product.id}`)
             .then((res) => {
-              console.log(res);
               this.Swal.fire(
                 res.data.message,
                 '你的資料已被刪除',

@@ -15,7 +15,7 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-lg-4">
               <div class="mb-2">
                 <div class="mb-3">
                   <label for="imageUrl" class="form-label">輸入圖片網址</label>
@@ -23,18 +23,33 @@
                 </div>
                 <img class="img-fluid" :src="admin.tempData.imageUrl" alt="">
               </div>
-              <div>
-                <button class="btn btn-outline-primary btn-sm d-block w-100">
-                  新增圖片
-                </button>
+              <label for="floatingInput" class="form-label">上傳檔案</label>
+              <div class="d-flex mb-3">
+                  <input type="file" class="form-control uploadEl" id="floatingInput">
+                  <button type="button" class="btn btn-primary ms-2" @click="admin.uploadFile()">upload</button>
               </div>
-              <div>
-                <button class="btn btn-outline-danger btn-sm d-block w-100">
-                  刪除圖片
-                </button>
+              <div v-if="Array.isArray(admin.tempData.imagesUrl)" class="mb-3">
+                <p class="fs-6 fw-bolder text-start mb-2">商品副圖網址</p>
+                <template v-for="(item , key) in admin.tempData.imagesUrl" :key="'img' + key">
+                    <img class="img-fluid" :src="admin.tempData.imagesUrl[key]" alt="">
+                    <label class="form-label w-100" for="url">副圖網址{{`${key + 1}`}}
+                      <input type="text" id="url" class="form-control mb-3"
+                        v-model="admin.tempData.imagesUrl[key]"
+                        :placeholder="`輸入副圖網址${key + 1}`">
+                    </label>
+                </template>
+                <!-- localProduct.imagesUrl沒有資料
+                或者localProduct.imagesUrl當下這筆已有資料
+                才可再新增下一筆 -->
+                <button type="button"
+                  v-if="!admin.tempData.imagesUrl.length || admin.tempData.imagesUrl[admin.tempData.imagesUrl.length - 1]" class="btn btn-primary w-100 mb-3"
+                  @click="admin.tempData.imagesUrl.push('')">新增</button>
+                <button type="button"
+                  class="btn btn-outline-danger w-100"
+                  @click="admin.tempData.imagesUrl.pop('')">刪除最後一個</button>
               </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-lg-8">
               <div class="mb-3">
                 <label for="title" class="form-label">標題</label>
                 <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model="admin.tempData.title">
@@ -114,13 +129,17 @@
 
 
 <script>
-  import { ref, reactive, toRefs } from 'vue';
   // 匯入loginStore
   import adminStore from '@/stores/admin/adminStore';
-  
+  // 匯入生命週期onMounted
+  import { onMounted, onUpdated } from 'vue';
+
   export default{
     setup() {
       const admin = adminStore();
+      onUpdated(() => {
+        admin.uploadEl = document.querySelector('.uploadEl');
+      })
       return{
         admin,
       }
