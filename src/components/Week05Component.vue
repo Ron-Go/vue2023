@@ -289,43 +289,35 @@ export default {
       setTimeout(() => {
         order.$reset(); // orderStore的資料回初始值
       }, 1000);
-    }
-    // 建立閉包私有方法（vue3-loading-overlay實體，loader.show()並帶入物件參數{}）
-    const loading = () => {
-      const loader = useLoading();
-      return {
-        show: (container) => {
-          //vue-loading-overlay出現的DOM元素
-          const containerDom = document.querySelector(container);
-          loader.show({
-            // Optional parameters
-            container: containerDom ? containerDom : null,
-            canCancel: false,
-            // onCancel: onCancel,
-            loader: 'Bars', //spinner/dots/bars
-            color: 'green',
-            width: 50,
-            height: 50,
-            backgroundColor: '#ffffff',
-            opacity: 1.0,
-            zIndex: 999,
-          });
-        },
-        hide: () => {
-          setTimeout(() => {
-            loader.hide();
-          }, 1500);
-        }
-      }    
     };
-    // vue-loading-overlay實體賦予給loader
-    const loader = loading();
+    
+    let loader = useLoading();
+    const loaderShow = (containerDom) => {
+      loader.show({
+        // Optional parameters
+        container: containerDom ? containerDom : null,
+        canCancel: false,
+        // onCancel: onCancel,
+        loader: 'Bars', //spinner/dots/bars
+        color: 'green',
+        width: 50,
+        height: 50,
+        backgroundColor: '#ffffff',
+        opacity: 1.0,
+        zIndex: 999,
+      });
+    };
+    const loaderHide = () => {
+      setTimeout(() => {
+        loader.hide();
+      },1000) 
+    };
     // 監聽adminStore的actions
     admin.$onAction(({ name, after, onError }) => {
       // actions的getProducts結束時，關掉loading圖示
       if (name === 'getProducts') {
         after(() => {
-          loader.hide();
+          loaderHide();
         });
       };
     });
@@ -335,7 +327,7 @@ export default {
       admin.checkStatus();
       // 取得購物車內容
       cart.getCart();
-      loader.show();
+      loaderShow();
     });
     return {
       admin,
