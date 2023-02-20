@@ -32,8 +32,8 @@ export default defineStore('statusStore', {
     },
     swDelect(product) {
       this.Swal.fire({
-        title: `確認刪除『${product.title}』?`,
-        text: "資料刪除後，你將無法恢復！",
+        title: `刪除產品『${product.title}』?`,
+        text: "資料刪除後，將無法恢復！",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

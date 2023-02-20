@@ -64,9 +64,9 @@ export default defineStore('loginStore', {
     isPassword(value) {
       // ^[a-zA-Z]：開頭為字母
       // \w：任何數字字元字母底線，等於[A-Za-z0-9_]
-      // {6,8}$：長度6~8個字元之間
-      const pwdRule = /^[a-zA-Z]\w{8,10}$/;
-      return pwdRule.test(value) ? true : '密碼為字母開頭，長度8~10字元';
+      // {9,10}$：長度9~10個字元之間
+      const pwdRule = /^[a-zA-Z]\w{9,10}$/;
+      return pwdRule.test(value) ? true : '密碼為字母開頭，長度9~10字元';
     },
   },
   debounce: {

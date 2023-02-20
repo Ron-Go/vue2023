@@ -95,7 +95,7 @@ export default defineStore('adminStore', {
         }
       })();
     },
-    // 新增資料至遠端
+    // 新增產品資料至遠端
     add(tempData) {
       (async () => {
         const status = statusStore();
@@ -111,7 +111,7 @@ export default defineStore('adminStore', {
         }
       })();
     },
-    // 更改遠端資料
+    // 更改產品遠端資料
     put(id, putData) {
       (async () => {
         const status = statusStore(); // 建立statusStore實體

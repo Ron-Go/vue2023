@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <table class="table mt-4">
+    <table class="table table-hover mt-4">
       <thead>
         <tr>
           <th width="120">

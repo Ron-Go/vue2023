@@ -8,6 +8,11 @@ const routes = [
     component: HomeView,
   },
   {
+    path: '/week05',
+    name: 'week05',
+    component: () => import('../components/Week05Component.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../components/admin/LoginComponent.vue'),

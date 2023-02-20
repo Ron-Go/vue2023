@@ -18,6 +18,7 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 // lodash函式庫的debounce
 import debounce from 'lodash/debounce';
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 
 /* 建立實體 */
 const pinia = createPinia(); // pinia實體
@@ -33,6 +34,12 @@ pinia.use(({ store }) => {
  store.router = markRaw(router);
  store.axios = markRaw(axios);
  store.Swal = markRaw(Swal);
+ store.$subscribe(() => {
+  // 訂閱store變化
+ });
+ store.$onAction(() => {
+  // 訂閱store actions
+ })
 });
 
 pinia.use(({ options, store }) => {
