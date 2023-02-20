@@ -283,15 +283,6 @@ export default {
       const productModal = new Modal(document.getElementById('productModal'));
       productModal.show();
     };
-    // 監聽adminStore的actions
-    admin.$onAction(({ name, after }) => {
-      // actions的getProducts結束時，關掉loading圖示
-      if (name === 'getProducts') {
-        after(() => {
-          vueLoading.hide();
-        });
-      };
-    });
     // 送出訂單
     const submit = async () => {
       await order.submit();
@@ -301,7 +292,7 @@ export default {
     }
     // 建立閉包私有方法（vue3-loading-overlay實體，loader.show()並帶入物件參數{}）
     const loading = () => {
-      let loader = useLoading();
+      const loader = useLoading();
       return {
         show: (container) => {
           //vue-loading-overlay出現的DOM元素
@@ -323,19 +314,28 @@ export default {
         hide: () => {
           setTimeout(() => {
             loader.hide();
-          }, 1000);
+          }, 1500);
         }
       }    
     };
     // vue-loading-overlay實體賦予給loader
-    const vueLoading = loading();
+    const loader = loading();
+    // 監聽adminStore的actions
+    admin.$onAction(({ name, after, onError }) => {
+      // actions的getProducts結束時，關掉loading圖示
+      if (name === 'getProducts') {
+        after(() => {
+          loader.hide();
+        });
+      };
+    });
     // 掛載組件後調用
     onMounted(() => {
       // 檢查登入狀態，取得產品資料
       admin.checkStatus();
       // 取得購物車內容
       cart.getCart();
-      vueLoading.show();
+      loader.show();
     });
     return {
       admin,
