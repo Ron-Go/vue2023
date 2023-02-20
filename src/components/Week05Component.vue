@@ -291,7 +291,7 @@ export default {
       }, 1000);
     };
     
-    let loader = useLoading();
+    const loader = useLoading();
     const loaderShow = (containerDom) => {
       loader.show({
         // Optional parameters
@@ -337,6 +337,7 @@ export default {
       submit,
       submitData,
       thousandths,
+      loader,
     };
   },
 };
