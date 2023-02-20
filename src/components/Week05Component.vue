@@ -290,9 +290,6 @@ export default {
         after(() => {
           loader.hide();
         });
-        onError(() => {
-          loader.hide();
-        });
       };
     });
     // 送出訂單

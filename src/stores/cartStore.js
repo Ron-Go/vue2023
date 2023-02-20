@@ -19,7 +19,6 @@ export default defineStore('cartStore', {
       this.axios.get(`${this.api.url}/api/${this.api.path}/cart`)
         .then(res => {
           // 取得購物車資料
-          console.log(res);
           this.tempCart = res.data.data;
         })
         .catch(err => {
