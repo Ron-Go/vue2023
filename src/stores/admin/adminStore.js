@@ -87,7 +87,6 @@ export default defineStore('adminStore', {
           // 取得資料
           this.getProducts();
         } catch (error) {
-          console.log(error);
           const { message } = error.response.data;
           const status = statusStore(); // 建立statusStore實體
           await status.swAlert('center', 'error', message, false, false);

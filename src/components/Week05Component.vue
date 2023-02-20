@@ -288,7 +288,7 @@ export default {
       // actions的getProducts結束時，關掉loading圖示
       if (name === 'getProducts') {
         after(() => {
-          loader.hide();
+          // loader.hide();
         });
       };
     });
@@ -335,7 +335,7 @@ export default {
       admin.checkStatus();
       // 取得購物車內容
       cart.getCart();
-      loader.show();
+      // loader.show();
     });
     return {
       admin,
