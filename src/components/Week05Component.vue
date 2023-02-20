@@ -288,7 +288,7 @@ export default {
       // actions的getProducts結束時，關掉loading圖示
       if (name === 'getProducts') {
         after(() => {
-          loader.hide();
+          vueLoading.hide();
         });
       };
     });
@@ -328,14 +328,14 @@ export default {
       }    
     };
     // vue-loading-overlay實體賦予給loader
-    const loader = loading();
+    const vueLoading = loading();
     // 掛載組件後調用
     onMounted(() => {
       // 檢查登入狀態，取得產品資料
       admin.checkStatus();
       // 取得購物車內容
       cart.getCart();
-      loader.show();
+      vueLoading.show();
     });
     return {
       admin,
