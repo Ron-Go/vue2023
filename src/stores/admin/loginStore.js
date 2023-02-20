@@ -46,7 +46,9 @@ export default defineStore('loginStore', {
           // 跳出狀態提示（加await轉為同步行為，已改為promise base）
           await swAlert('center', 'success', message, false, false);
           // 轉跳admin頁面
-          this.router.push('/admin/products');
+          // this.router.push('/admin/products');
+          // 轉跳第五週作業
+          this.router.push('/week05');
         } catch (err) {
           const { message } = err.response.data;
           this.cleanInputValue();
@@ -64,13 +66,9 @@ export default defineStore('loginStore', {
     isPassword(value) {
       // ^[a-zA-Z]：開頭為字母
       // \w：任何數字字元字母底線，等於[A-Za-z0-9_]
-      // {9,10}$：長度9~10個字元之間
-      const pwdRule = /^[a-zA-Z]\w{9,10}$/;
-      return pwdRule.test(value) ? true : '密碼為字母開頭，長度9~10字元';
+      // {8,10}$：長度8~10個字元之間
+      const pwdRule = /^[a-zA-Z]\w{8,10}$/;
+      return pwdRule.test(value) ? true : '密碼為字母開頭，長度8~10字元';
     },
-  },
-  debounce: {
-    // 让 action searchContacts 防抖 300ms
-    searchContacts: 1000,
   },
 });
