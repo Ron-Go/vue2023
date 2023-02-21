@@ -3,7 +3,7 @@
     :style="{
       opacity: admin.tempProducts.length ? 1 : 0,
     }"
-    style="transition: all 3s">
+    style="transition: all 1.5s">
     <div class="mt-4">
       <!-- 產品Modal -->
 
@@ -266,7 +266,7 @@ import orderStore from '@/stores/admin/ordersStore.js';
 // 匯入bootstrap Modal
 import Modal from 'bootstrap/js/src/modal.js';
 // 匯入useLoading
-import { useLoading } from 'vue3-loading-overlay';
+import {useLoading} from 'vue-loading-overlay'
 // 匯入mixin方法（價格千分位、轉換時間）
 import { thousandths, convertDate } from '../mixins/mixinsFunc.js'
 
@@ -276,6 +276,15 @@ export default {
     const cart = cartStore(); // cartStore實體
     const order = orderStore(); // orderStore實體
     const { submitData } = storeToRefs(order);
+    // 監聽adminStore的actions
+    admin.$onAction(({ name, after, onError }) => {
+      // actions的getProducts結束時，關掉loading圖示
+      if (name === 'getProducts') {
+        after(() => {
+          loader.hide();
+        });
+      };
+    });
     // 產品查看更多
     const openModal = (item) => {
       admin.tempData = { ...item };
@@ -291,43 +300,40 @@ export default {
       }, 1000);
     };
     
-    const loader = useLoading();
-    const loaderShow = (containerDom) => {
-      loader.show({
-        // Optional parameters
-        container: containerDom ? containerDom : null,
-        canCancel: false,
-        // onCancel: onCancel,
-        loader: 'Bars', //spinner/dots/bars
-        color: 'green',
-        width: 50,
-        height: 50,
-        backgroundColor: '#ffffff',
-        opacity: 1.0,
-        zIndex: 999,
-      });
+    const loading = () => {
+      const $loading = useLoading({});
+      let loader = null;
+      return {
+        show: () => {
+          loader = $loading.show({
+            container: null,
+            canCancel: false,
+            // onCancel: onCancel,
+            loader: 'Bars', //spinner/dots/bars
+            color: 'green',
+            width: 75,
+            height: 75,
+            backgroundColor: '#ffffff',
+            isFullPage: false,
+            opacity: 1.0,
+            zindex: 999
+          });
+        },
+        hide: () => {
+          setTimeout(() => {
+            loader.hide()
+          }, 1000)
+        }
+      }
     };
-    const loaderHide = () => {
-      setTimeout(() => {
-        loader.hide();
-      },1000) 
-    };
-    // 監聽adminStore的actions
-    admin.$onAction(({ name, after, onError }) => {
-      // actions的getProducts結束時，關掉loading圖示
-      if (name === 'getProducts') {
-        after(() => {
-          loaderHide();
-        });
-      };
-    });
+    const loader = loading();
     // 掛載組件後調用
     onMounted(() => {
       // 檢查登入狀態，取得產品資料
       admin.checkStatus();
       // 取得購物車內容
       cart.getCart();
-      loaderShow();
+      loader.show();
     });
     return {
       admin,
