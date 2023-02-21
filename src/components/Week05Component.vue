@@ -154,11 +154,11 @@
           <v-field
             id="tel"
             name="電話"
-            type="text"
+            type="tel"
             class="form-control"
             :class="{ 'is-invalid': errors['電話'] }"
             placeholder="請輸入電話"
-            rules="required"
+            :rules="isPhone"
             v-model="submitData.user.tel"
           ></v-field>
           <error-message name="電話" class="invalid-feedback"></error-message>
@@ -267,8 +267,10 @@ import orderStore from '@/stores/admin/ordersStore.js';
 import Modal from 'bootstrap/js/src/modal.js';
 // 匯入useLoading
 import {useLoading} from 'vue-loading-overlay'
-// 匯入mixin方法（價格千分位、轉換時間）
-import { thousandths, convertDate } from '../mixins/mixinsFunc.js'
+// 匯入mixin方法（價格千分位）
+import { thousandths } from '../mixins/mixinsFunc.js'
+// 匯入mixin方法（輸入驗證）
+import { isPhone } from '../mixins/mixinsRule.js'
 
 export default {
   setup() {
@@ -327,6 +329,11 @@ export default {
       }
     };
     const loader = loading();
+    // function isPhone(value) {
+    //   const startRule = /^[0]*[9]/; // 驗證開頭是否為09
+    //   const lengthRule = /\d{10}$/;  // 驗證是否為數字，以及是否有10個字元
+    //   return startRule.test(value) ? lengthRule.test(value) ? true : '手機號碼為數字，共10碼' : '手機號碼開頭為09';
+    // };
     // 掛載組件後調用
     onMounted(() => {
       // 檢查登入狀態，取得產品資料
@@ -344,6 +351,7 @@ export default {
       submitData,
       thousandths,
       loader,
+      isPhone
     };
   },
 };

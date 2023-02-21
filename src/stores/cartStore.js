@@ -90,7 +90,7 @@ export default defineStore('cartStore', {
     },
   },
   // 在actions後面被插件讀取
-  // 建立debounce選項，讓任何action實現防抖
+  // 建立debounce選項，讓action能夠實現防抖
   debounce: {
     // actions 修改購物車商品數量、增加到購物車，防抖500ms
     changeQty: 500,

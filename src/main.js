@@ -18,7 +18,6 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 // lodash函式庫的debounce
 import debounce from 'lodash/debounce';
-// import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import 'vue-loading-overlay/dist/css/index.css';
 
 /* 建立實體 */
